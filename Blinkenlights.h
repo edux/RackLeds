@@ -3,18 +3,25 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+struct LedState {
+    uint8_t baseState:1;
+    /// time remaining for next toggle
+    int16_t timeLeftOn;
+    int8_t broadcast;
+};
+
 template<size_t ledCount, typename LedImpl>
 class Blinkenlights {
 public:
     LedImpl p;
 
-    uint8_t baseState[ledCount] = {0};
-    /// time remaining for next toggle of each LED
-    int16_t timeLeftOn[ledCount] = {0};
-    int8_t broadcast[ledCount] = {0};
+    LedState led[ledCount];
 
     void tick();
-    void init() { p.init(); }
+    void init() {
+        p.init();
+        memset(led, 0, sizeof(led));
+    }
 };
 
 const uint16_t TICK=20;
@@ -24,29 +31,30 @@ void Blinkenlights<ledCount, LedImpl>::tick() {
   if (rand() % 100 == 2) {
     for (uint8_t i=0; i<ledCount; ++i) {
       if (rand() % 3 != 0) {
-        broadcast[i] = 80;
+        led[i].broadcast = 80;
       }
     }
   }
   for (uint8_t i=0; i<ledCount; ++i) {
-    timeLeftOn[i] -= TICK;
-    if (broadcast[i] > 0) {
-        broadcast[i] -= TICK;
+    led[i].timeLeftOn -= TICK;
+    if (led[i].broadcast > 0) {
+        led[i].broadcast -= TICK;
     }
-    if (timeLeftOn[i] < 0) {
-      if (baseState[i]) {
-        baseState[i] = 0;
+    if (led[i].timeLeftOn < 0) {
+      if (led[i].baseState) {
+        led[i].baseState = 0;
         p.ledOff(i);
-        timeLeftOn[i] = 80;
+        led[i].timeLeftOn = 80;
       } else {
-        baseState[i] = 1;
+        led[i].baseState = 1;
         p.ledOn(i);
-        timeLeftOn[i] = (i==2 ? 70 : // constantly busy
-                         i==5 ? random16(500,3000) :  // mostly idle
-                         random16(10,600));
+        led[i].timeLeftOn = (
+            i==2 ? 70 : // constantly busy
+            i==5 ? random16(500,3000) :  // mostly idle
+            random16(10,600));
       }
     }
-    if (baseState[i] && broadcast[i] <= 0) {
+    if (led[i].baseState && led[i].broadcast <= 0) {
       p.ledOn(i);
     } else {
       p.ledOff(i);
