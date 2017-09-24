@@ -32,14 +32,15 @@ Arduboy2Base arduboy;
 Blinkenlights<NUM_LEDS, ArduLedImpl> blinkenlights;
 
 #define RADIUS 3
-#define gridposx(n) ((RADIUS+1) + (RADIUS*2+2) * (n))
+#define SPACING 6
+#define gridposx(n) ((RADIUS+1) + SPACING*2*(n))
 
 void ArduLedImpl::refresh() {
     arduboy.clear();
 
     for (uint_fast8_t i=0; i<NUM_LEDS; ++i) {
-        if (leds[i]) {
-            arduboy.fillCircle(gridposx(i%16), 8, RADIUS, WHITE);
+        if (leds[i] && blinkenlights.broadcast[i]<=0) {
+            arduboy.fillCircle(gridposx(i%8), gridposx(i/8), RADIUS, WHITE);
         }
     }
 
