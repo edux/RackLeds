@@ -2,7 +2,7 @@
 #include "Blinkenlights.h"
 
 // How many leds in your strip?
-#define NUM_LEDS 8
+#define NUM_LEDS 150
 
 #define DATA_PIN 3
 
@@ -14,7 +14,7 @@ public:
         FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
     }
     inline void ledOn(uint8_t idx) {
-        leds[idx] = 0x000400;
+        leds[idx] = 0x004000;
     }
     inline void ledOff(uint8_t idx) {
         leds[idx] = 0x000000;
