@@ -6,7 +6,7 @@ uint16_t random16(uint16_t from, uint16_t to) {
 
 #include "Blinkenlights.h"
 
-#define NUM_LEDS 16
+#define NUM_LEDS 30
 
 class ArduLedImpl {
 private:
@@ -40,7 +40,7 @@ void ArduLedImpl::refresh() {
 
     for (uint_fast8_t i=0; i<NUM_LEDS; ++i) {
         if (leds[i]) {
-            arduboy.fillCircle(gridposx(i%8), gridposx(i/8), RADIUS, WHITE);
+            arduboy.fillCircle(gridposx(i%10), gridposx(i/10), RADIUS, WHITE);
         }
     }
 
