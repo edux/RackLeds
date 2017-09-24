@@ -2,8 +2,15 @@
 
 USER_LIB_PATH  = libraries
 
-BOARD_TAG    = uno
-ARDUINO_LIBS = FastLED
+ifeq (x$(TARGET), xarduboy)
+    BOARD_TAG = leonardo
+    ARDUINO_LIBS = Arduboy2 EEPROM
+    LOCAL_INO_SRCS = RackLedsArduboy.ino
+else
+    BOARD_TAG    = uno
+    ARDUINO_LIBS = FastLED
+    LOCAL_INO_SRCS = RackLeds.ino
+endif
 
 include Arduino.mk
 

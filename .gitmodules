@@ -1,3 +1,6 @@
 [submodule "libraries/FastLED"]
 	path = libraries/FastLED
 	url = https://github.com/FastLED/FastLED
+[submodule "libraries/Arduboy2"]
+	path = libraries/Arduboy2
+	url = https://github.com/MLXXXp/Arduboy2
