@@ -6,7 +6,7 @@ uint16_t random16(uint16_t from, uint16_t to) {
 
 #include "Blinkenlights.h"
 
-#define NUM_LEDS 3
+#define NUM_LEDS 16
 
 class ArduLedImpl {
 private:
@@ -14,8 +14,6 @@ private:
 public:
     inline void init() {
         memset(leds, 0, sizeof(leds));
-        pinMode(30, OUTPUT);
-        pinMode(17, OUTPUT);
     }
     inline void ledOn(uint8_t idx) {
         leds[idx] = 1;
@@ -26,16 +24,27 @@ public:
     inline uint8_t ledState(uint8_t idx) const {
         return (uint8_t)(leds[idx] != 0);
     }
-    inline void refresh() {
-        digitalWrite(17, leds[0] ? HIGH : LOW);
-        digitalWrite(30, leds[1] ? HIGH : LOW);
-        //digitalWrite(GREEN_LED, leds[2] ? HIGH : LOW);
-    }
+    inline void refresh();
 };
 
 Arduboy2Base arduboy;
 
 Blinkenlights<NUM_LEDS, ArduLedImpl> blinkenlights;
+
+#define RADIUS 3
+#define gridposx(n) ((RADIUS+1) + (RADIUS*2+2) * (n))
+
+void ArduLedImpl::refresh() {
+    arduboy.clear();
+
+    for (uint_fast8_t i=0; i<NUM_LEDS; ++i) {
+        if (leds[i]) {
+            arduboy.fillCircle(gridposx(i%16), 8, RADIUS, WHITE);
+        }
+    }
+
+    arduboy.display();
+}
 
 void setup() {
     arduboy.begin();
