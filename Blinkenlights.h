@@ -8,7 +8,8 @@ class Blinkenlights {
 public:
     LedImpl p;
 
-    /// time remaining for next toggle of each lED
+    uint8_t baseState[ledCount] = {0};
+    /// time remaining for next toggle of each LED
     int16_t timeLeftOn[ledCount] = {0};
     int8_t broadcast[ledCount] = {0};
 
@@ -33,15 +34,22 @@ void Blinkenlights<ledCount, LedImpl>::tick() {
         broadcast[i] -= TICK;
     }
     if (timeLeftOn[i] < 0) {
-      if (p.ledState(i)) {
+      if (baseState[i]) {
+        baseState[i] = 0;
         p.ledOff(i);
         timeLeftOn[i] = 80;
       } else {
+        baseState[i] = 1;
         p.ledOn(i);
         timeLeftOn[i] = (i==2 ? 70 : // constantly busy
                          i==5 ? random16(500,3000) :  // mostly idle
                          random16(10,600));
       }
+    }
+    if (baseState[i] && broadcast[i] <= 0) {
+      p.ledOn(i);
+    } else {
+      p.ledOff(i);
     }
   }
   p.refresh();

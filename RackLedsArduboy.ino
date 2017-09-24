@@ -39,7 +39,7 @@ void ArduLedImpl::refresh() {
     arduboy.clear();
 
     for (uint_fast8_t i=0; i<NUM_LEDS; ++i) {
-        if (leds[i] && blinkenlights.broadcast[i]<=0) {
+        if (leds[i]) {
             arduboy.fillCircle(gridposx(i%8), gridposx(i/8), RADIUS, WHITE);
         }
     }
