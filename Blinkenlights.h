@@ -5,8 +5,11 @@
 
 struct LedState {
     uint8_t baseState:1;
+    uint8_t isIdle:1;
+    uint8_t isFrequent:1;
     /// time remaining for next toggle
     int16_t timeLeftOn;
+    /// how much longer this LED will be off to simulate a broadcast
     int8_t broadcast;
 };
 
@@ -21,6 +24,12 @@ public:
     void init() {
         p.init();
         memset(led, 0, sizeof(led));
+        for (uint8_t i=0; i<ledCount/5; ++i) {
+            led[random16(0, ledCount)].isIdle = 1;
+        }
+        for (uint8_t i=0; i<ledCount/10; ++i) {
+            led[random16(0, ledCount)].isFrequent = 1;
+        }
     }
 };
 
@@ -49,8 +58,8 @@ void Blinkenlights<ledCount, LedImpl>::tick() {
         led[i].baseState = 1;
         p.ledOn(i);
         led[i].timeLeftOn = (
-            i==2 ? 70 : // constantly busy
-            i==5 ? random16(500,3000) :  // mostly idle
+            led[i].isFrequent ? random(50,80) : // constantly busy
+            led[i].isIdle ? random16(500,5000) :  // mostly idle
             random16(10,600));
       }
     }
