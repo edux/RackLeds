@@ -7,14 +7,13 @@
 #define DATA_PIN 3
 
 class FastLedImpl {
-private:
-    CRGB leds[NUM_LEDS];
 public:
+    CRGB leds[NUM_LEDS];
     inline void init() {
         FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
     }
-    inline void ledOn(uint8_t idx) {
-        leds[idx] = 0x004000;
+    inline void ledOn(uint8_t idx, CRGB color) {
+        leds[idx] = color;
     }
     inline void ledOff(uint8_t idx) {
         leds[idx] = 0x000000;
@@ -30,9 +29,22 @@ public:
 Blinkenlights<NUM_LEDS, FastLedImpl> blinkenlights;
 
 void setup() {
+    random16_set_seed(42);
     blinkenlights.init();
 }
 
+int n=0;
+
 void loop() {
-    blinkenlights.tick();
+    //blinkenlights.tick();
+    memset(blinkenlights.p.leds, 0, sizeof(blinkenlights.p.leds));
+    for(auto i=0; i<10; ++i) {
+        blinkenlights.p.leds[disks[0][n%10]] = 0x00ff00;
+        blinkenlights.p.leds[disks[1][n%10]] = 0x00ff00;
+        blinkenlights.p.leds[disks[2][n%10]] = 0x00ff00;
+    }
+    //blinkenlights.p.leds[n%118] = 0xff0000;
+    n++;
+    FastLED.show();
+    delay(400);
 }

@@ -15,7 +15,7 @@ public:
     inline void init() {
         memset(leds, 0, sizeof(leds));
     }
-    inline void ledOn(uint8_t idx) {
+    inline void ledOn(uint8_t idx, uint32_t color) {
         leds[idx] = 1;
     }
     inline void ledOff(uint8_t idx) {
