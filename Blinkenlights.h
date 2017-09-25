@@ -110,7 +110,7 @@ void Blinkenlights<ledCount, LedImpl>::tick() {
         randomColors();
         timeToNextRecolor = 10000;
     }
-#if 0
+
     for (uint8_t i=0; i<ledCount; ++i) {
         if (i == morseLed) continue;
         led[i].timeLeftOn -= TICK;
@@ -136,7 +136,7 @@ void Blinkenlights<ledCount, LedImpl>::tick() {
             p.ledOff(i);
         }
     }
-#endif
+
     updateMorse();
 
     p.refresh();
