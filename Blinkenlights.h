@@ -64,43 +64,44 @@ const uint16_t TICK=20;
 template<size_t ledCount, typename LedImpl>
 void Blinkenlights<ledCount, LedImpl>::tick() {
 #if 0
-  if (rand() % 100 == 2) {
-    for (uint8_t i=0; i<ledCount; ++i) {
-      if (rand() % 3 != 0) {
-        led[i].broadcast = 80;
-      }
+    if (rand() % 100 == 2) {
+        for (uint8_t i=0; i<ledCount; ++i) {
+            if (rand() % 3 != 0) {
+                led[i].broadcast = 80;
+            }
+        }
     }
-  }
 #endif
-  timeToNextRecolor -= TICK;
-  if (timeToNextRecolor <= 0) {
-      randomColors();
-      timeToNextRecolor = 10000;
-  }
+    timeToNextRecolor -= TICK;
+    if (timeToNextRecolor <= 0) {
+        randomColors();
+        timeToNextRecolor = 10000;
+    }
 
-  for (uint8_t i=0; i<ledCount; ++i) {
-    led[i].timeLeftOn -= TICK;
-    if (led[i].broadcast > 0) {
-        led[i].broadcast -= TICK;
+    for (uint8_t i=0; i<ledCount; ++i) {
+        led[i].timeLeftOn -= TICK;
+        if (led[i].broadcast > 0) {
+                led[i].broadcast -= TICK;
+        }
+        if (led[i].timeLeftOn < 0) {
+            if (led[i].baseState) {
+                led[i].baseState = 0;
+                led[i].timeLeftOn = 80;
+            } else {
+                led[i].baseState = 1;
+                led[i].timeLeftOn = (
+                    led[i].isFrequent ? random(50,80) :  // constantly busy
+                    led[i].isIdle ? random16(500,5000) : // mostly idle
+                    random16(10,600)
+                );
+            }
+        }
+        if (led[i].baseState && led[i].broadcast <= 0) {
+            p.ledOn(i, led[i].color);
+        } else {
+            p.ledOff(i);
+        }
     }
-    if (led[i].timeLeftOn < 0) {
-      if (led[i].baseState) {
-        led[i].baseState = 0;
-        led[i].timeLeftOn = 80;
-      } else {
-        led[i].baseState = 1;
-        led[i].timeLeftOn = (
-            led[i].isFrequent ? random(50,80) : // constantly busy
-            led[i].isIdle ? random16(500,5000) :  // mostly idle
-            random16(10,600));
-      }
-    }
-    if (led[i].baseState && led[i].broadcast <= 0) {
-      p.ledOn(i, led[i].color);
-    } else {
-      p.ledOff(i);
-    }
-  }
-  p.refresh();
-  delay(TICK);
+    p.refresh();
+    delay(TICK);
 }
