@@ -29,6 +29,37 @@ uint8_t disks[][10] = {
     {102,103,104,105,106,107,108,109,110,111}
 };
 
+// This array specifies the number of time units the LED will be on.
+// Negative numbers mean LED off. There will be 1 unit of LED off between each item anyway,
+// thus using 1,-1,1 means 1 on, 3 off, 1 on.
+
+char morseString[] = "PUTO EL QUE LEE";
+
+int8_t morse[] = {
+    1,2,2,1,-1,     // P
+    1,1,2,-1,       // U
+    2,-1,           // T
+    2,2,2,-1,       // O
+    -5,
+    1,-1,           // E
+    1,2,1,1,-1,     // L
+    -5,
+    2,2,1,2,-1,     // Q
+    1,1,2,-1,       // U
+    1,-1,           // E
+    -5,
+    1,2,1,1,-1,     // L
+    1,-1,           // E
+    1,-1,           // E
+    -9
+};
+const uint8_t morseLed = 1;
+const int16_t morseUnitLength = 200;
+const uint16_t morseDataLength = sizeof(morse) / sizeof(*morse);
+uint8_t morseIdx = 0;
+int morseChrIdx = 0;
+int16_t morseRemaining = morseUnitLength;
+
 template<size_t ledCount, typename LedImpl>
 class Blinkenlights {
 public:
@@ -56,7 +87,9 @@ public:
         }
         timeToNextRecolor = 0;
         randomColors();
+        Serial.begin(9600);
     }
+    void updateMorse();
 };
 
 const uint16_t TICK=20;
@@ -77,8 +110,9 @@ void Blinkenlights<ledCount, LedImpl>::tick() {
         randomColors();
         timeToNextRecolor = 10000;
     }
-
+#if 0
     for (uint8_t i=0; i<ledCount; ++i) {
+        if (i == morseLed) continue;
         led[i].timeLeftOn -= TICK;
         if (led[i].broadcast > 0) {
                 led[i].broadcast -= TICK;
@@ -102,6 +136,49 @@ void Blinkenlights<ledCount, LedImpl>::tick() {
             p.ledOff(i);
         }
     }
+#endif
+    updateMorse();
+
     p.refresh();
     delay(TICK);
+}
+
+#ifdef MORSE_DEBUGGING_CLOCK
+int16_t clock = morseUnitLength/2;
+bool clockBlink = true;
+#endif
+template<size_t ledCount, typename LedImpl>
+void Blinkenlights<ledCount, LedImpl>::updateMorse() {
+    morseRemaining -= TICK;
+#ifdef MORSE_DEBUGGING_CLOCK
+    clock -= TICK;
+    if (clock <= 0) {
+        if (shit)
+        p.ledOff(0);
+        else p.ledOn(0,0xff0000);
+        shit = !shit;
+        clock=morseUnitLength/2;
+    }
+#endif
+    if (morseRemaining <= morseUnitLength) {
+        p.ledOff(morseLed);
+    }
+    if (morseRemaining <= 0) {
+        if (morse[morseIdx] < 0) {
+            // next interval is off
+            p.ledOff(morseLed);
+            Serial.write(morseString[morseChrIdx]);
+            morseChrIdx++;
+        } else {
+            p.ledOn(morseLed, 0x00ff00);
+        }
+        morseRemaining = morseUnitLength * (1+abs(morse[morseIdx]));
+        morseIdx++;
+        if (morseIdx >= morseDataLength) {
+            morseIdx = 0;
+            morseChrIdx = 0;
+            Serial.write('\r');
+            Serial.write('\n');
+        }
+    }
 }

@@ -36,7 +36,8 @@ void setup() {
 int n=0;
 
 void loop() {
-    //blinkenlights.tick();
+    blinkenlights.tick();
+#if 0
     memset(blinkenlights.p.leds, 0, sizeof(blinkenlights.p.leds));
     for(auto i=0; i<10; ++i) {
         blinkenlights.p.leds[disks[0][n%10]] = 0x00ff00;
@@ -45,6 +46,5 @@ void loop() {
     }
     //blinkenlights.p.leds[n%118] = 0xff0000;
     n++;
-    FastLED.show();
-    delay(400);
+#endif
 }
