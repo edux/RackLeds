@@ -53,7 +53,7 @@ int8_t morse[] = {
     1,-1,           // E
     -9
 };
-const uint8_t morseLed = 1;
+const uint8_t morseLed = 60;
 const int16_t morseUnitLength = 200;
 const uint16_t morseDataLength = sizeof(morse) / sizeof(*morse);
 uint8_t morseIdx = 0;
