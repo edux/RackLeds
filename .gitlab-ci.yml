@@ -1,0 +1,16 @@
+image: debian:testing
+
+before_script:
+  - apt-get update && apt-get install -q -y --no-install-recommends arduino-mk
+
+variables:
+  GIT_SUBMODULE_STRATEGY: normal
+  GIT_SSL_NO_VERIFY: "true"
+
+stages:
+  - build
+
+job1:
+  stage: build
+  script:
+    - make -I /usr/share/arduino/
