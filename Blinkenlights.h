@@ -59,6 +59,7 @@ int8_t morse[] = {
 };
 const uint8_t morseLed = 60;
 const int16_t morseUnitLength = 130;
+const CRGB morseColor = 0x00ffff;
 const uint16_t morseDataLength = sizeof(morse) / sizeof(*morse);
 uint8_t morseIdx = 0;
 int morseChrIdx = 0;
@@ -174,7 +175,7 @@ void Blinkenlights<ledCount, LedImpl>::updateMorse() {
             Serial.write(morseString[morseChrIdx]);
             morseChrIdx++;
         } else {
-            p.ledOn(morseLed, 0x00ff00);
+            p.ledOn(morseLed, morseColor);
         }
         morseRemaining = morseUnitLength * (1+abs(morse[morseIdx]));
         morseIdx++;
