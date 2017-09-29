@@ -23,7 +23,7 @@ CRGB colors[] = {
     0x009900,
     0x999900,
     0xff0000,
-    0x66cc00,
+    0x000088,
 };
 
 uint8_t disks[][10] = {
@@ -75,7 +75,7 @@ public:
     void randomColors() {
         for (uint8_t i=0; i<ledCount; ++i) {
 //            led[i].color = FL_PGM_READ_DWORD_NEAR(RainbowColors_p + random8(16));
-            led[i].color = colors[random8(9)];
+            led[i].color = colors[random8(sizeof(colors)/sizeof(*colors))];
             //led[i].color = 0x00ff00;
         }
     }
