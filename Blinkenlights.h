@@ -34,7 +34,8 @@ uint8_t disks[][10] = {
 
 // This array specifies the number of time units the LED will be on.
 // Negative numbers mean LED off. There will be 1 unit of LED off between each item anyway,
-// thus using 1,-1,1 means 1 on, 3 off, 1 on.
+// thus using 1,1,1 is 1 on, 1 off, 1 on, 1 off, 1 on
+// and 1,-1,1 means 1 on, 3 off, 1 on.
 
 char morseString[] = "PUTO EL QUE LEE";
 
@@ -57,7 +58,7 @@ int8_t morse[] = {
     -9
 };
 const uint8_t morseLed = 60;
-const int16_t morseUnitLength = 200;
+const int16_t morseUnitLength = 130;
 const uint16_t morseDataLength = sizeof(morse) / sizeof(*morse);
 uint8_t morseIdx = 0;
 int morseChrIdx = 0;
