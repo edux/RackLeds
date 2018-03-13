@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 struct LedState {
-    CRGB color;
+    uint32_t color;
     uint8_t baseState:1;
     uint8_t isIdle:1;
     uint8_t isFrequent:1;
@@ -14,7 +14,7 @@ struct LedState {
     int8_t broadcast;
 };
 
-CRGB colors[] = {
+uint32_t colors[] = {
     0x008800,
     0x008800,
     0x009900,
@@ -59,7 +59,7 @@ int8_t morse[] = {
 };
 const uint8_t morseLed = 60;
 const int16_t morseUnitLength = 130;
-const CRGB morseColor = 0x00ffff;
+const uint32_t morseColor = 0x00ffff;
 const uint16_t morseDataLength = sizeof(morse) / sizeof(*morse);
 uint8_t morseIdx = 0;
 int morseChrIdx = 0;
