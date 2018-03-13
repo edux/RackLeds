@@ -162,7 +162,7 @@ void Blinkenlights<ledCount, LedImpl>::updateMorse() {
         p.ledOff(0);
         else p.ledOn(0,0xff0000);
         shit = !shit;
-        clock=morseUnitLength/2;
+        clock = morseUnitLength / 2;
     }
 #endif
     if (morseRemaining <= morseUnitLength) {
