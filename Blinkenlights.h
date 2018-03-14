@@ -3,6 +3,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#include "utils.h"
+
 struct LedState {
     uint32_t color;
     uint8_t baseState:1;
@@ -76,8 +78,8 @@ public:
     void tick();
     void randomColors() {
         for (uint8_t i=0; i<ledCount; ++i) {
-//            led[i].color = FL_PGM_READ_DWORD_NEAR(RainbowColors_p + random8(16));
-            led[i].color = colors[random8(sizeof(colors)/sizeof(*colors))];
+//            led[i].color = FL_PGM_READ_DWORD_NEAR(RainbowColors_p + rl_random8(16));
+            led[i].color = colors[rl_random8(sizeof(colors)/sizeof(*colors))];
             //led[i].color = 0x00ff00;
         }
     }
