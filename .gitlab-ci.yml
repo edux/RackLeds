@@ -1,4 +1,4 @@
-image: registry.gitlab.com/nicolas17/ekoparty-leds-dockerbase:latest
+image: registry.gitlab.com/nicolas17/ekoparty-leds-dockerbase:v1.0.5-mk
 
 variables:
   GIT_SUBMODULE_STRATEGY: normal
