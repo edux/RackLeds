@@ -1,4 +1,4 @@
-image: registry.gitlab.com/nicolas17/ekoparty-leds-dockerbase:v1.0.5-mk
+image: registry.gitlab.com/nicolas17/ekoparty-leds-dockerbase:v1.6.13-mk
 
 variables:
   GIT_SUBMODULE_STRATEGY: normal
@@ -10,4 +10,4 @@ stages:
 job1:
   stage: build
   script:
-    - make -I /usr/share/arduino/
+    - make -I /usr/share/arduino/ ARDUINO_DIR=/root/arduino-1.6.13
