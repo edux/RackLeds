@@ -78,8 +78,8 @@ public:
     void tick();
     void randomColors() {
         for (uint8_t i=0; i<ledCount; ++i) {
-//            led[i].color = FL_PGM_READ_DWORD_NEAR(RainbowColors_p + rl_random8(16));
-            led[i].color = colors[rl_random8(sizeof(colors)/sizeof(*colors))];
+//            led[i].color = FL_PGM_READ_DWORD_NEAR(RainbowColors_p + random8(16));
+            led[i].color = colors[random8(sizeof(colors)/sizeof(*colors))];
             //led[i].color = 0x00ff00;
         }
     }
@@ -131,7 +131,7 @@ void Blinkenlights<ledCount, LedImpl>::tick() {
             } else {
                 led[i].baseState = 1;
                 led[i].timeLeftOn = (
-                    led[i].isFrequent ? random(50,80) :  // constantly busy
+                    led[i].isFrequent ? random16(50,80) :  // constantly busy
                     led[i].isIdle ? random16(500,5000) : // mostly idle
                     random16(10,600)
                 );
