@@ -11,6 +11,7 @@ public:
     CRGB leds[NUM_LEDS];
     inline void init() {
         FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
+        FastLED.setBrightness(10);
     }
     inline void ledOn(uint8_t idx, CRGB color) {
         leds[idx] = color;
