@@ -81,7 +81,7 @@ public:
             //led[i].color = FL_PGM_READ_DWORD_NEAR(RainbowColors_p + random8(16));
             led[i].color = colors[random8(sizeof(colors)/sizeof(*colors))];
             // if you need to setup 1 single color for the full array
-            led[i].color = CRGB::Navy;
+            //led[i].color = CRGB::Navy;
         }
     }
     void init() {
@@ -100,7 +100,7 @@ public:
     void updateMorse();
 };
 
-const uint16_t TICK=5000;
+const uint16_t TICK=200;
 
 template<size_t ledCount, typename LedImpl>
 void Blinkenlights<ledCount, LedImpl>::tick() {
