@@ -6,12 +6,14 @@
 
 #define DATA_PIN 3
 
+
+
 class FastLedImpl {
 public:
     CRGB leds[NUM_LEDS];
     inline void init() {
         FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
-        FastLED.setBrightness(10);
+        FastLED.setBrightness(20);
     }
     inline void ledOn(uint8_t idx, CRGB color) {
         leds[idx] = color;
@@ -38,14 +40,4 @@ int n=0;
 
 void loop() {
     blinkenlights.tick();
-#if 0
-    memset(blinkenlights.p.leds, 0, sizeof(blinkenlights.p.leds));
-    for(auto i=0; i<10; ++i) {
-        blinkenlights.p.leds[disks[0][n%10]] = 0x00ff00;
-        blinkenlights.p.leds[disks[1][n%10]] = 0x00ff00;
-        blinkenlights.p.leds[disks[2][n%10]] = 0x00ff00;
-    }
-    //blinkenlights.p.leds[n%118] = 0xff0000;
-    n++;
-#endif
 }
