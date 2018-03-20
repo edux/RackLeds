@@ -16,7 +16,8 @@ struct LedState {
     int8_t broadcast;
 };
 
-uint32_t colors[] = {
+// Color pallete, random chooses from here.
+CRGB colors[] = {
     0x008800,
     0x008800,
     0x009900,
@@ -59,7 +60,8 @@ int8_t morse[] = {
     1,-1,           // E
     -9
 };
-const uint8_t morseLed = 60;
+// this led has the morse code
+const uint8_t morseLed = 1;
 const int16_t morseUnitLength = 130;
 const uint32_t morseColor = 0x00ffff;
 const uint16_t morseDataLength = sizeof(morse) / sizeof(*morse);
@@ -78,9 +80,10 @@ public:
     void tick();
     void randomColors() {
         for (uint8_t i=0; i<ledCount; ++i) {
-//            led[i].color = FL_PGM_READ_DWORD_NEAR(RainbowColors_p + random8(16));
+            //led[i].color = FL_PGM_READ_DWORD_NEAR(RainbowColors_p + random8(16));
             led[i].color = colors[random8(sizeof(colors)/sizeof(*colors))];
-            //led[i].color = 0x00ff00;
+            // if you need to setup 1 single color for the full array
+            //led[i].color = CRGB::Navy;
         }
     }
     void init() {
@@ -99,7 +102,7 @@ public:
     void updateMorse();
 };
 
-const uint16_t TICK=20;
+const uint16_t TICK=200;
 
 template<size_t ledCount, typename LedImpl>
 void Blinkenlights<ledCount, LedImpl>::tick() {
@@ -144,7 +147,7 @@ void Blinkenlights<ledCount, LedImpl>::tick() {
         }
     }
 
-    updateMorse();
+    //updateMorse();
 
     p.refresh();
     delay(TICK);
